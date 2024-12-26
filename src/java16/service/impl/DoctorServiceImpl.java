@@ -11,8 +11,8 @@ public class DoctorServiceImpl implements DoctorService, GenericService<Doctor> 
   private final   DoctorDaoImpl doctorDao = new DoctorDaoImpl();
     @Override
     public String add(Long hospitalId, Doctor doctor) {
-        doctorDao.add(hospitalId,doctor);
-        return "Successful!";
+      return   doctorDao.add(hospitalId,doctor);
+
     }
 
     @Override

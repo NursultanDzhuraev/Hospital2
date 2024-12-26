@@ -366,16 +366,7 @@ public class Main {
                     return;
                 }
                 case 1 -> {
-                    Hospital hospital = createHospitalInput();
-                    try {
-                        hospitalService.addHospital(hospital);
-                    } catch (RuntimeException e) {
-                        System.out.println(e.getMessage());
-                        System.out.println("Write the name: ");
-                        String name = scanForStr.nextLine();
-                        hospital.setHospitalName(name);
-                        hospitalService.addHospital(hospital);
-                    }
+                    System.out.println(hospitalService.addHospital(createHospitalInput()));
                 }
                 case 2 -> {
                     System.out.print("Enter hospital id: ");

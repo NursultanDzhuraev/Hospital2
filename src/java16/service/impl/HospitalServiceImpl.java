@@ -12,12 +12,7 @@ public class HospitalServiceImpl implements HospitalService {
     private final HospitalDaoImpl hospitalDao = new HospitalDaoImpl();
     @Override
     public String addHospital(Hospital hospital) {
-        try {
-            hospitalDao.addHospital(hospital);
-        } catch (RuntimeException e) {
-           throw new RuntimeException(e.getMessage());
-        }
-        return "Successful";
+         return  hospitalDao.addHospital(hospital);
     }
 
     @Override
@@ -37,8 +32,8 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Override
     public String deleteHospitalById(Long id) {
-        hospitalDao.deleteHospitalById(id);
-        return "Deleted!";
+      return  hospitalDao.deleteHospitalById(id);
+
     }
 
     @Override

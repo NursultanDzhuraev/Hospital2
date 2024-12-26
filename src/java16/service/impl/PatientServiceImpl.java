@@ -13,8 +13,8 @@ public class PatientServiceImpl implements PatientService, GenericService<Patien
 
     @Override
     public String add(Long hospitalId, Patient patient) {
-        patientDao.add(hospitalId, patient);
-        return "Successful!";
+      return   patientDao.add(hospitalId, patient);
+
     }
 
     @Override
@@ -24,14 +24,14 @@ public class PatientServiceImpl implements PatientService, GenericService<Patien
 
     @Override
     public String updateById(Long id, Patient patient) {
-        patientDao.updateById(id,patient);
-        return "Updated!";
+      return   patientDao.updateById(id,patient);
+
     }
 
     @Override
     public String addPatientsToHospital(Long id, List<Patient> patients) {
-        patientDao.addPatientsToHospital(id,patients);
-        return "Saved!";
+     return    patientDao.addPatientsToHospital(id,patients);
+
     }
 
     @Override

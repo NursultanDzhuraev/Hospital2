@@ -7,65 +7,70 @@ import java16.models.Department;
 import java16.models.Hospital;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DepartmentDaoImpl implements DepartmentDao, GenericDao<Department> {
     @Override
     public String add(Long hospitalId, Department department) {
-        for (Hospital hospital : DataBase.hospitals) {
-            if (hospital.getId().equals(hospitalId)){
-                    hospital.getDepartments().add(department);
-                    return "Saved!";
-            }
-        }
-        return "no save";
+        Boolean b = DataBase.hospitals.stream()
+                .filter(hospital -> hospital.getId().equals(hospitalId))
+                .findFirst()
+                .map(hospital -> hospital.getDepartments().add(department))
+                .orElse(false);
+        return b ? "Saved!" : "no save";
     }
 
     @Override
     public void removeById(Long id) {
-        for (Hospital hospital : DataBase.hospitals) {
-            for (Department department : hospital.getDepartments()) {
-                if (department.getId().equals(id)){
-                    hospital.getDepartments().remove(id);
-                    System.out.println("removed!");
-                }
-            }
-        }
+        DataBase.hospitals.forEach(h -> h.getDepartments().removeIf(d -> d.getId().equals(id)));
+        System.out.println("removed!");
+
     }
 
     @Override
     public String updateById(Long id, Department department) {
         for (Hospital hospital : DataBase.hospitals) {
-            for (Department hospitalDepartment : hospital.getDepartments()) {
-                if (hospitalDepartment.getId().equals(id)){
-                    hospitalDepartment.setDepartmentName(department.getDepartmentName());
-                    hospitalDepartment.setDoctors(department.getDoctors());
-                    hospitalDepartment.setId(department.getId());
-                    return "Successful!";
-                }
+            Department department2 = hospital.getDepartments().stream()
+                    .filter(d -> d.getId().equals(id))
+                    .peek(department1 -> {
+                        department1.setDepartmentName(department.getDepartmentName());
+                    })
+                    .findFirst()
+                    .orElse(null);
+            if (department2 != null) {
+                System.out.println(department2);
+                return "updated";
             }
+
         }
-        return "not found!";
+        return "not fount";
     }
 
     @Override
     public List<Department> getAllDepartmentByHospital(Long id) {
-        for (Hospital hospital : DataBase.hospitals) {
-            if (hospital.getId().equals(id)){
-                return hospital.getDepartments();
-            }
-        }
-        return null;
+        return DataBase.hospitals.stream()
+                .filter(h -> h.getId().equals(id))
+                 .findFirst()
+                 .orElseThrow(()->new NoSuchElementException("not found")).getDepartments();
+
     }
 
     @Override
     public Department findDepartmentByName(String name) {
-        for (Hospital hospital : DataBase.hospitals) {
-            for (Department department : hospital.getDepartments()) {
-                if (department.getDepartmentName().equalsIgnoreCase(name)){
-                    return department;
-                }
-            }
-        }
-        return null;
+        return DataBase.hospitals.stream()
+                .flatMap(h -> h.getDepartments().stream())
+                .filter(d -> d.getDepartmentName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+    }
+    public Department findDepartmentById(Long id) {
+        return DataBase.hospitals.stream()
+                .flatMap(h -> h.getDepartments().stream())
+                .filter(d -> d.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 }

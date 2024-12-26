@@ -11,8 +11,7 @@ public class DepartmentServiceImpl implements DepartmentService, GenericService<
     private final DepartmentDaoImpl departmentDao = new DepartmentDaoImpl();
     @Override
     public String add(Long hospitalId, Department department) {
-        departmentDao.add(hospitalId,department);
-        return "Successful!";
+     return  departmentDao.add(hospitalId,department);
     }
 
     @Override
@@ -22,8 +21,7 @@ departmentDao.removeById(id);
 
     @Override
     public String updateById(Long id, Department department) {
-        departmentDao.updateById(id,department);
-        return "Updated department!";
+      return   departmentDao.updateById(id,department);
     }
 
     @Override
